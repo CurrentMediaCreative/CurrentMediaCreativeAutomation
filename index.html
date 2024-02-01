@@ -3,61 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Response Page</title>
+    <title>Your Fillable Form</title>
 </head>
 <body>
 
-<script>
-    function openConfirmationPage(url) {
-        // Open the confirmation page in the current window
-        window.location.href = url;
-    }
+<form action="process_form.php" method="post">
+    <label for="projectName">Project Name:</label>
+    <input type="text" id="projectName" name="projectName" required><br>
 
-    // Function to format a date as a string (excluding time)
-    function formatDate(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
+    <label for="equipmentName">Equipment Name:</label>
+    <input type="text" id="equipmentName" name="equipmentName" required><br>
 
-    // Rest of your JavaScript code...
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate" required><br>
 
-    // Mock data for testing
-    var ProjectName = "Project ABC";
-    var EquipmentName = "Camera, Microphone";
-    var StartDate = new Date("2024-03-06");
-    var EndDate = new Date("2024-03-08");
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate" required><br>
 
-    // Check if any of the equipment is not available for the specified date range
-    var unavailableEquipment = getUnavailableEquipment(EquipmentName, StartDate, EndDate);
-
-    if (unavailableEquipment.length === 0) {
-        // All equipment is available, construct the URL for the confirmation page
-        var confirmationUrl = 'https://www.formresponse.currentmedia.ca' +
-            '?projectName=' + encodeURIComponent(ProjectName) +
-            '&equipmentName=' + encodeURIComponent(EquipmentName) +
-            '&startDate=' + encodeURIComponent(formatDate(StartDate)) +
-            '&endDate=' + encodeURIComponent(formatDate(EndDate));
-
-        // Open the confirmation page in a new window
-        openConfirmationPage(confirmationUrl);
-
-    } else {
-        // Some equipment is not available, handle accordingly
-        var errorMessage = 'Equipment not available from ' + formatDate(StartDate) + ' to ' + formatDate(EndDate) + '. Please review your submission.';
-        console.error('Error Message Set: %s', errorMessage);
-        console.error('Equipment: %s', EquipmentName);
-        console.error('Date Range: %s to %s', StartDate, EndDate);
-
-        // Construct the URL for the confirmation page with the error message
-        var errorUrl = 'https://www.formresponse.currentmedia.ca' +
-            '?errorMessage=' + encodeURIComponent(errorMessage);
-
-        // Open the confirmation page with the error message in a new window
-        openConfirmationPage(errorUrl);
-    }
-</script>
+    <input type="submit" value="Submit">
+</form>
 
 </body>
 </html>
