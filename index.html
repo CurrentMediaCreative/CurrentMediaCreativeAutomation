@@ -2,42 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Submission Confirmation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            color: #4CAF50;
-        }
-
-        p {
-            margin-top: 10px;
-        }
-    </style>
+    <title>Form Response Page</title>
 </head>
 <body>
-    <h1>Form Submission Confirmation</h1>
 
-    <p id="confirmationMessage">Thank you for your submission!</p>
+<script>
+    function openConfirmationPage(url) {
+        // Open the confirmation page in the current window
+        window.location.href = url;
+    }
 
-    <script>
-        // Parse URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const projectName = urlParams.get('projectName');
-        const equipmentName = urlParams.get('equipmentName');
-        const startDate = urlParams.get('startDate');
-        const endDate = urlParams.get('endDate');
+    // Function to format a date as a string (excluding time)
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
-        // Generate dynamic content
-        const confirmationMessage = `Project: ${projectName}<br>Equipment: ${equipmentName}<br>Date Range: ${startDate} to ${endDate}`;
+    // Rest of your JavaScript code...
 
-        // Display confirmation message
-        document.getElementById('confirmationMessage').innerHTML = confirmationMessage;
-    </script>
+    // Mock data for testing
+    var ProjectName = "Project ABC";
+    var EquipmentName = "Camera, Microphone";
+    var StartDate = new Date("2024-03-06");
+    var EndDate = new Date("2024-03-08");
+
+    // Check if any of the equipment is not available for the specified date range
+    var unavailableEquipment = getUnavailableEquipment(EquipmentName, StartDate, EndDate);
+
+    if (unavailableEquipment.length === 0) {
+        // All equipment is available, construct the URL for the confirmation page
+        var confirmationUrl = 'https://www.formresponse.currentmedia.ca' +
+            '?projectName=' + encodeURIComponent(ProjectName) +
+            '&equipmentName=' + encodeURIComponent(EquipmentName) +
+            '&startDate=' + encodeURIComponent(formatDate(StartDate)) +
+            '&endDate=' + encodeURIComponent(formatDate(EndDate));
+
+        // Open the confirmation page in a new window
+        openConfirmationPage(confirmationUrl);
+
+    } else {
+        // Some equipment is not available, handle accordingly
+        var errorMessage = 'Equipment not available from ' + formatDate(StartDate) + ' to ' + formatDate(EndDate) + '. Please review your submission.';
+        console.error('Error Message Set: %s', errorMessage);
+        console.error('Equipment: %s', EquipmentName);
+        console.error('Date Range: %s to %s', StartDate, EndDate);
+
+        // Construct the URL for the confirmation page with the error message
+        var errorUrl = 'https://www.formresponse.currentmedia.ca' +
+            '?errorMessage=' + encodeURIComponent(errorMessage);
+
+        // Open the confirmation page with the error message in a new window
+        openConfirmationPage(errorUrl);
+    }
+</script>
+
 </body>
 </html>
